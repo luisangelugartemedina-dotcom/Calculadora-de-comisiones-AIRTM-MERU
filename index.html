@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Comisiones Airtm a Meru</title>
+    <style>
+        :root {
+            --primary: #6C63FF;
+            --secondary: #FF6584;
+            --accent: #36D1DC;
+            --light: #F8F9FA;
+            --dark: #343A40;
+            --success: #4CAF50;
+            --warning: #FFC107;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: white;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            padding: 30px 25px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        input[type="number"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #E9ECEF;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
+        }
+        
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(108, 99, 255, 0.3);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(108, 99, 255, 0.4);
+        }
+        
+        .result {
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 12px;
+            background-color: var(--light);
+            display: none;
+        }
+        
+        .result.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .result-title {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+            font-weight: 700;
+            text-align: center;
+        }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #E9ECEF;
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .result-label {
+            font-weight: 500;
+        }
+        
+        .result-value {
+            font-weight: 700;
+        }
+        
+        .airtm-section, .meru-section {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .airtm-section {
+            background: linear-gradient(135deg, rgba(255, 101, 132, 0.1) 0%, rgba(255, 101, 132, 0.05) 100%);
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .meru-section {
+            background: linear-gradient(135deg, rgba(54, 209, 220, 0.1) 0%, rgba(54, 209, 220, 0.05) 100%);
+            border-left: 4px solid var(--accent);
+        }
+        
+        .section-title {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .final-amount {
+            font-size: 1.8rem;
+            font-weight: 800;
+            text-align: center;
+            margin: 15px 0;
+            color: var(--success);
+        }
+        
+        .commission-total {
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            background-color: rgba(255, 193, 7, 0.1);
+            border: 1px solid var(--warning);
+            margin-top: 20px;
+        }
+        
+        .warning {
+            color: var(--secondary);
+            font-weight: 600;
+            text-align: center;
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: rgba(255, 101, 132, 0.1);
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                border-radius: 12px;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💰 Calculadora de Comisiones</h1>
+            <p class="subtitle">Airtm → Meru (Stellar USDC)</p>
+        </div>
+        
+        <div class="content">
+            <div class="input-group">
+                <label for="comision-meru-input">Comisión de Meru (%) - Personalizable:</label>
+                <input type="number" id="comision-meru-input" min="0" step="0.01" value="0.25" placeholder="Ej: 0.25">
+            </div>
+            
+            <div class="input-group">
+                <label for="monto">Monto a retirar de Airtm (USDC):</label>
+                <input type="number" id="monto" min="1" step="0.01" value="100" placeholder="Ingresa el monto en USDC">
+            </div>
+            
+            <button onclick="calcularComisiones()">Calcular Comisiones</button>
+            
+            <div id="resultado" class="result">
+                <h3 class="result-title">Resumen de Transacción</h3>
+                
+                <div class="result-item">
+                    <span class="result-label">Monto inicial en Airtm:</span>
+                    <span class="result-value" id="monto-inicial">$100.00 USDC</span>
+                </div>
+                
+                <div class="airtm-section">
+                    <div class="section-title">Comisión de Airtm (0.7%)</div>
+                    <div class="result-item">
+                        <span class="result-label">Comisión:</span>
+                        <span class="result-value" id="comision-airtm">-$0.70 USDC</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Monto enviado a Meru:</span>
+                        <span class="result-value" id="monto-enviado">$99.30 USDC</span>
+                    </div>
+                </div>
+                
+                <div class="meru-section">
+                    <div class="section-title">Comisión de Meru (<span id="meru-porcentaje-display">0.25%</span> del monto enviado)</div>
+                    <div class="result-item">
+                        <span class="result-label">Comisión:</span>
+                        <span class="result-value" id="comision-meru">-$0.25 USDC</span>
+                    </div>
+                    <div class="section-title">Monto final en Meru:</div>
+                    <div class="final-amount" id="monto-final">$99.05 USDC</div>
+                </div>
+                
+                <div class="commission-total">
+                    <div class="result-item">
+                        <span class="result-label">Comisión total:</span>
+                        <span class="result-value" id="comision-total">-$0.95 USDC</span>
+                    </div>
+                </div>
+                
+                <div id="advertencia" class="warning" style="display: none;">
+                    El monto final es negativo. El monto a retirar es demasiado bajo y no cubre las comisiones.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function calcularComisiones() {
+            // 1. Obtener valores de los inputs
+            const montoInicial = parseFloat(document.getElementById('monto').value);
+            const comisionMeruPorcentajeInput = parseFloat(document.getElementById('comision-meru-input').value);
+            
+            const resultadoDiv = document.getElementById('resultado');
+            const advertenciaDiv = document.getElementById('advertencia');
+            
+            // Comisiones fijas
+            const comisionAirtmPorcentaje = 0.007; // 0.7%
+            
+            // Conversión del porcentaje de Meru (de '0.25' a '0.0025')
+            const comisionMeruTasa = comisionMeruPorcentajeInput / 100; 
+
+            // 2. Validación
+            if (isNaN(montoInicial) || montoInicial < 0.01 || isNaN(comisionMeruPorcentajeInput)) {
+                // Ocultar resultados si hay un valor inválido
+                resultadoDiv.classList.remove('show');
+                return;
+            }
+            
+            // 3. Cálculos
+            
+            // Cálculos Airtm
+            const comisionAirtm = montoInicial * comisionAirtmPorcentaje;
+            const montoEnviadoAirtm = montoInicial - comisionAirtm;
+            
+            // Cálculos Meru
+            const comisionMeru = montoEnviadoAirtm * comisionMeruTasa;
+            const montoFinalMeru = montoEnviadoAirtm - comisionMeru;
+            
+            const comisionTotal = comisionAirtm + comisionMeru;
+
+            // 4. Actualizar la interfaz (Formateo a 2 decimales)
+            
+            document.getElementById('monto-inicial').textContent = `$${montoInicial.toFixed(2)} USDC`;
+            document.getElementById('comision-airtm').textContent = `-$${comisionAirtm.toFixed(2)} USDC`;
+            document.getElementById('monto-enviado').textContent = `$${montoEnviadoAirtm.toFixed(2)} USDC`;
+            document.getElementById('comision-meru').textContent = `-$${comisionMeru.toFixed(2)} USDC`;
+            document.getElementById('monto-final').textContent = `$${montoFinalMeru.toFixed(2)} USDC`;
+            document.getElementById('comision-total').textContent = `-$${comisionTotal.toFixed(2)} USDC`;
+            
+            // Actualizar el porcentaje de Meru en el título de la sección
+            document.getElementById('meru-porcentaje-display').textContent = `${comisionMeruPorcentajeInput.toFixed(2)}%`;
+            
+            // Mostrar advertencia si el monto final es muy bajo o negativo
+            if (montoFinalMeru <= 0) {
+                advertenciaDiv.style.display = 'block';
+            } else {
+                advertenciaDiv.style.display = 'none';
+            }
+            
+            // Mostrar resultados
+            resultadoDiv.classList.add('show');
+        }
+        
+        // Ejecutar el cálculo con el valor por defecto al cargar
+        document.addEventListener('DOMContentLoaded', calcularComisiones);
+        
+        // Calcular al cambiar cualquier valor de los inputs
+        document.getElementById('monto').addEventListener('input', calcularComisiones);
+        document.getElementById('comision-meru-input').addEventListener('input', calcularComisiones);
+    </script>
+</body>
+</html>
